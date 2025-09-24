@@ -19,68 +19,46 @@ enum AppRoutes {
   mainCat3,
 }
 
-extension AppRoutesExtension on AppRoutes {
-  String get path {
-    switch (this) {
-      case AppRoutes.mainCat1:
-        return '/mainCat1';
-      case AppRoutes.main1SubCat1:
-        return 'SubCat1'; // Relative path for nested route
-      case AppRoutes.main1SubCat2:
-        return 'SubCat2'; // Relative path for nested route
-      case AppRoutes.mainCat2:
-        return '/mainCat2';
-      case AppRoutes.main2SubCat1:
-        return 'SubCat1'; // Relative path for nested route
-      case AppRoutes.main2SubCat2:
-        return 'SubCat2'; // Relative path for nested route
-      case AppRoutes.mainCat3:
-        return '/mainCat3';
-    }
-  }
-}
-
 @AutoRouterConfig(replaceInRouteName: 'Page|Screen|Tab,Route')
 class AppRouter extends RootStackRouter {
   @override
   List<AutoRoute> get routes => [
-    // Main Category 1 with nested routes
-    AutoRoute(
-      path: AppRoutes.mainCat1.path,
+    // Use custom transitions to remove animation
+    CustomRoute(
+      path: '/${AppRoutes.mainCat1.name}',
       page: MainCat1Route.page,
       initial: true,
-      children: [
-        AutoRoute(path: '', page: MainCat1Route.page),
-        AutoRoute(
-          path: AppRoutes.main1SubCat1.path,
-          page: Main1SubCat1Route.page,
-        ),
-        AutoRoute(
-          path: AppRoutes.main1SubCat2.path,
-          page: Main1SubCat2Route.page,
-        ),
-      ],
+      transitionsBuilder: TransitionsBuilders.noTransition,
     ),
-    // Main Category 2 with nested routes
-    AutoRoute(
-      path: AppRoutes.mainCat2.path,
+    CustomRoute(
+      path: '/${AppRoutes.main1SubCat1.name}',
+      page: Main1SubCat1Route.page,
+      transitionsBuilder: TransitionsBuilders.noTransition,
+    ),
+    CustomRoute(
+      path: '/${AppRoutes.main1SubCat2.name}',
+      page: Main1SubCat2Route.page,
+      transitionsBuilder: TransitionsBuilders.noTransition,
+    ),
+    CustomRoute(
+      path: '/${AppRoutes.mainCat2.name}',
       page: MainCat2Route.page,
-      children: [
-        AutoRoute(path: '', page: MainCat2Route.page),
-        AutoRoute(
-          path: AppRoutes.main2SubCat1.path,
-          page: Main2SubCat1Route.page,
-        ),
-        AutoRoute(
-          path: AppRoutes.main2SubCat2.path,
-          page: Main2SubCat2Route.page,
-        ),
-      ],
+      transitionsBuilder: TransitionsBuilders.noTransition,
     ),
-    // Main Category 3 (no nested routes)
-    AutoRoute(
-      path: AppRoutes.mainCat3.path,
+    CustomRoute(
+      path: '/${AppRoutes.main2SubCat1.name}',
+      page: Main2SubCat1Route.page,
+      transitionsBuilder: TransitionsBuilders.noTransition,
+    ),
+    CustomRoute(
+      path: '/${AppRoutes.main2SubCat2.name}',
+      page: Main2SubCat2Route.page,
+      transitionsBuilder: TransitionsBuilders.noTransition,
+    ),
+    CustomRoute(
+      path: '/${AppRoutes.mainCat3.name}',
       page: MainCat3Route.page,
+      transitionsBuilder: TransitionsBuilders.noTransition,
     ),
   ];
 }

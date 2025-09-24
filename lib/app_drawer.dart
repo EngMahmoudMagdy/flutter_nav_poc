@@ -1,5 +1,5 @@
-import 'package:flutter/material.dart';
 import 'package:auto_route/auto_route.dart';
+import 'package:flutter/material.dart';
 import 'package:nav_poc/route/app_router.dart';
 
 class AppDrawer extends StatelessWidget {
@@ -7,107 +7,141 @@ class AppDrawer extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Drawer(
-      child: ListView(
-        padding: EdgeInsets.zero,
+    return Container(
+      color: Colors.white,
+      child: Column(
         children: [
-          const DrawerHeader(
-            decoration: BoxDecoration(
-              color: Colors.blue,
-            ),
-            child: Text(
-              'Navigation POC',
-              style: TextStyle(
-                color: Colors.white,
-                fontSize: 24,
+          // Drawer header
+          Container(
+            height: 120,
+            width: double.infinity,
+            decoration: BoxDecoration(color: Colors.blue.shade700),
+            child: const Padding(
+              padding: EdgeInsets.all(16.0),
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.end,
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(
+                    'Navigation POC',
+                    style: TextStyle(
+                      color: Colors.white,
+                      fontSize: 20,
+                      fontWeight: FontWeight.bold,
+                    ),
+                  ),
+                  SizedBox(height: 4),
+                  Text(
+                    'Master-Detail Layout',
+                    style: TextStyle(color: Colors.white70, fontSize: 14),
+                  ),
+                ],
               ),
             ),
           ),
-          _buildSectionHeader(context, 'Main Category 1'),
-          _buildDrawerItem(
-            context,
-            'Main Cat1 - Home',
-            Icons.home,
-                () => context.pushRoute(const MainCat1Route()),
-          ),
-          _buildDrawerItem(
-            context,
-            'Sub Cat1.1',
-            Icons.arrow_forward_ios,
-                () => context.pushRoute(const Main1SubCat1Route()),
-            indent: 16.0,
-          ),
-          _buildDrawerItem(
-            context,
-            'Sub Cat1.2',
-            Icons.arrow_forward_ios,
-                () => context.pushRoute(const Main1SubCat2Route()),
-            indent: 16.0,
-          ),
+          Expanded(
+            child: ListView(
+              padding: EdgeInsets.zero,
+              children: [
+                _buildSectionHeader('Main Category 1'),
+                _buildDrawerItem(
+                  context,
+                  'Main Cat1 - Home',
+                  Icons.home,
+                  () => _navigateToRoute(context, const MainCat1Route()),
+                ),
+                _buildDrawerItem(
+                  context,
+                  'Sub Cat1.1',
+                  Icons.arrow_forward_ios,
+                  () => _navigateToRoute(context, const Main1SubCat1Route()),
+                  indent: 16.0,
+                ),
+                _buildDrawerItem(
+                  context,
+                  'Sub Cat1.2',
+                  Icons.arrow_forward_ios,
+                  () => _navigateToRoute(context, const Main1SubCat2Route()),
+                  indent: 16.0,
+                ),
 
-          _buildSectionHeader(context, 'Main Category 2'),
-          _buildDrawerItem(
-            context,
-            'Main Cat2 - Home',
-            Icons.business,
-                () => context.pushRoute(const MainCat2Route()),
-          ),
-          _buildDrawerItem(
-            context,
-            'Sub Cat2.1',
-            Icons.arrow_forward_ios,
-                () => context.pushRoute(const Main2SubCat1Route()),
-            indent: 16.0,
-          ),
-          _buildDrawerItem(
-            context,
-            'Sub Cat2.2',
-            Icons.arrow_forward_ios,
-                () => context.pushRoute(const Main2SubCat2Route()),
-            indent: 16.0,
-          ),
+                _buildSectionHeader('Main Category 2'),
+                _buildDrawerItem(
+                  context,
+                  'Main Cat2 - Home',
+                  Icons.business,
+                  () => _navigateToRoute(context, const MainCat2Route()),
+                ),
+                _buildDrawerItem(
+                  context,
+                  'Sub Cat2.1',
+                  Icons.arrow_forward_ios,
+                  () => _navigateToRoute(context, const Main2SubCat1Route()),
+                  indent: 16.0,
+                ),
+                _buildDrawerItem(
+                  context,
+                  'Sub Cat2.2',
+                  Icons.arrow_forward_ios,
+                  () => _navigateToRoute(context, const Main2SubCat2Route()),
+                  indent: 16.0,
+                ),
 
-          _buildSectionHeader(context, 'Main Category 3'),
-          _buildDrawerItem(
-            context,
-            'Main Cat3',
-            Icons.category,
-                () => context.pushRoute(const MainCat3Route()),
+                _buildSectionHeader('Main Category 3'),
+                _buildDrawerItem(
+                  context,
+                  'Main Cat3',
+                  Icons.category,
+                  () => _navigateToRoute(context, const MainCat3Route()),
+                ),
+              ],
+            ),
           ),
         ],
       ),
     );
   }
 
-  Widget _buildSectionHeader(BuildContext context, String title) {
+  void _navigateToRoute(BuildContext context, PageRouteInfo route) {
+    // For mobile, close the drawer after navigation
+    if (MediaQuery.of(context).size.width < 600) {
+      Navigator.pop(context);
+    }
+    context.pushRoute(route);
+  }
+
+  Widget _buildSectionHeader(String title) {
     return Padding(
       padding: const EdgeInsets.fromLTRB(16, 20, 16, 8),
       child: Text(
         title,
-        style: Theme.of(context).textTheme.titleMedium?.copyWith(
+        style: const TextStyle(
           fontWeight: FontWeight.bold,
-          color: Colors.blue.shade700,
+          color: Colors.blue,
+          fontSize: 16,
         ),
       ),
     );
   }
 
   Widget _buildDrawerItem(
-      BuildContext context,
-      String title,
-      IconData icon,
-      VoidCallback onTap, {
-        double indent = 0.0,
-      }) {
+    BuildContext context,
+    String title,
+    IconData icon,
+    VoidCallback onTap, {
+    double indent = 0.0,
+  }) {
     return Padding(
       padding: EdgeInsets.only(left: indent),
       child: ListTile(
-        leading: Icon(icon, size: 20),
-        title: Text(title),
-        onTap: () {
-          Navigator.pop(context); // Close drawer
-          onTap();
-        },
+        leading: Icon(icon, size: 20, color: Colors.grey.shade700),
+        title: Text(
+          title,
+          style: TextStyle(color: Colors.grey.shade800, fontSize: 14),
+        ),
+        onTap: onTap,
+        contentPadding: const EdgeInsets.symmetric(horizontal: 16),
+        minLeadingWidth: 24,
       ),
     );
   }

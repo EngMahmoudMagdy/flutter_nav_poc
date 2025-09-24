@@ -1,6 +1,6 @@
 import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
-import 'package:nav_poc/app_scaffold.dart';
+import 'package:nav_poc/master_details_page.dart';
 
 @RoutePage()
 class Main2SubCat1Page extends StatelessWidget {
@@ -8,7 +8,7 @@ class Main2SubCat1Page extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return AppScaffold(
+    return MasterDetailScaffold(
       body: Container(
         color: Colors.red.withAlpha(20),
         child: Column(
@@ -23,7 +23,8 @@ class Main2SubCat1Page extends StatelessWidget {
             ),
           ],
         ),
-      ), title: 'Main 2 Sub Cat 1 page',
+      ),
+      title: 'Main 2 Sub Cat 1 page',
     );
   }
 }
