@@ -8,23 +8,20 @@ class MainCat3Page extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return MasterDetailScaffold(
-      body: Container(
-        color: Colors.blue.withAlpha(20),
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          crossAxisAlignment: CrossAxisAlignment.center,
-          children: [
-            Center(
-              child: Text(
-                'Main Cat 3 page',
-                style: TextStyle(color: Colors.blue, fontSize: 22),
-              ),
+    return Container(
+      color: Colors.blue.withAlpha(20),
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        crossAxisAlignment: CrossAxisAlignment.center,
+        children: [
+          Center(
+            child: Text(
+              'Main Cat 3 page',
+              style: TextStyle(color: Colors.blue, fontSize: 22),
             ),
-          ],
-        ),
+          ),
+        ],
       ),
-      title: 'Main Cat 3 page',
     );
   }
 }

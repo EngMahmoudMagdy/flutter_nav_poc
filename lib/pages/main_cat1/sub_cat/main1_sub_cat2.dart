@@ -8,23 +8,20 @@ class Main1SubCat2Page extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return MasterDetailScaffold(
-      body: Container(
-        color: Colors.amber.withAlpha(20),
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          crossAxisAlignment: CrossAxisAlignment.center,
-          children: [
-            Center(
-              child: Text(
-                'Main 1 Sub Cat 2 page',
-                style: TextStyle(color: Colors.deepPurple, fontSize: 22),
-              ),
+    return Container(
+      color: Colors.amber.withAlpha(20),
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        crossAxisAlignment: CrossAxisAlignment.center,
+        children: [
+          Center(
+            child: Text(
+              'Main 1 Sub Cat 2 page',
+              style: TextStyle(color: Colors.deepPurple, fontSize: 22),
             ),
-          ],
-        ),
+          ),
+        ],
       ),
-      title: 'Main 1 Sub Cat 2 page',
     );
   }
 }

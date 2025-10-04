@@ -9,59 +9,65 @@ class AppDrawer extends StatelessWidget {
   Widget build(BuildContext context) {
     return Container(
       color: Colors.white,
-      child: Column(
-        children: [
-          // Drawer header
-          Container(
-            height: 120,
-            width: double.infinity,
-            decoration: BoxDecoration(color: Colors.blue.shade700),
-            child: const Padding(
-              padding: EdgeInsets.all(16.0),
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.end,
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Text(
-                    'Navigation POC',
-                    style: TextStyle(
-                      color: Colors.white,
-                      fontSize: 20,
-                      fontWeight: FontWeight.bold,
+      child: SingleChildScrollView(
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            // Drawer header
+            Container(
+              height: 120,
+              decoration: BoxDecoration(color: Colors.blue.shade700),
+              child: const Padding(
+                padding: EdgeInsets.all(16.0),
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.end,
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                      'Navigation POC',
+                      style: TextStyle(
+                        color: Colors.white,
+                        fontSize: 20,
+                        fontWeight: FontWeight.bold,
+                      ),
                     ),
-                  ),
-                  SizedBox(height: 4),
-                  Text(
-                    'Master-Detail Layout',
-                    style: TextStyle(color: Colors.white70, fontSize: 14),
-                  ),
-                ],
+                    SizedBox(height: 4),
+                    Text(
+                      'Master-Detail Layout',
+                      style: TextStyle(color: Colors.white70, fontSize: 14),
+                    ),
+                  ],
+                ),
               ),
             ),
-          ),
-          Expanded(
-            child: ListView(
-              padding: EdgeInsets.zero,
+            ListView(
+              shrinkWrap: true,
               children: [
                 _buildSectionHeader('Main Category 1'),
                 _buildDrawerItem(
                   context,
                   'Main Cat1 - Home',
                   Icons.home,
-                  () => _navigateToRoute(context, const MainCat1Route()),
+                  () => _navigateToMainCategory(context, const MainCat1Route()),
                 ),
                 _buildDrawerItem(
                   context,
                   'Sub Cat1.1',
                   Icons.arrow_forward_ios,
-                  () => _navigateToRoute(context, const Main1SubCat1Route()),
+                  () => _navigateToSubCategory(
+                    context,
+                    const Main1SubCat1Route(),
+                  ),
                   indent: 16.0,
                 ),
                 _buildDrawerItem(
                   context,
                   'Sub Cat1.2',
                   Icons.arrow_forward_ios,
-                  () => _navigateToRoute(context, const Main1SubCat2Route()),
+                  () => _navigateToSubCategory(
+                    context,
+                    const Main1SubCat2Route(),
+                  ),
                   indent: 16.0,
                 ),
 
@@ -70,20 +76,26 @@ class AppDrawer extends StatelessWidget {
                   context,
                   'Main Cat2 - Home',
                   Icons.business,
-                  () => _navigateToRoute(context, const MainCat2Route()),
+                  () => _navigateToMainCategory(context, const MainCat2Route()),
                 ),
                 _buildDrawerItem(
                   context,
                   'Sub Cat2.1',
                   Icons.arrow_forward_ios,
-                  () => _navigateToRoute(context, const Main2SubCat1Route()),
+                  () => _navigateToSubCategory(
+                    context,
+                    const Main2SubCat1Route(),
+                  ),
                   indent: 16.0,
                 ),
                 _buildDrawerItem(
                   context,
                   'Sub Cat2.2',
                   Icons.arrow_forward_ios,
-                  () => _navigateToRoute(context, const Main2SubCat2Route()),
+                  () => _navigateToSubCategory(
+                    context,
+                    const Main2SubCat2Route(),
+                  ),
                   indent: 16.0,
                 ),
 
@@ -92,22 +104,23 @@ class AppDrawer extends StatelessWidget {
                   context,
                   'Main Cat3',
                   Icons.category,
-                  () => _navigateToRoute(context, const MainCat3Route()),
+                  () => _navigateToMainCategory(context, const MainCat3Route()),
                 ),
               ],
             ),
-          ),
-        ],
+          ],
+        ),
       ),
     );
   }
 
-  void _navigateToRoute(BuildContext context, PageRouteInfo route) {
-    // For mobile, close the drawer after navigation
-    if (MediaQuery.of(context).size.width < 600) {
-      Navigator.pop(context);
-    }
-    context.pushRoute(route);
+  // Or use replace to change the main content:
+  void _navigateToMainCategory(BuildContext context, PageRouteInfo route) {
+    context.router.push(route);
+  }
+
+  void _navigateToSubCategory(BuildContext context, PageRouteInfo route) {
+    context.router.push(route);
   }
 
   Widget _buildSectionHeader(String title) {

@@ -1,4 +1,5 @@
 import 'package:auto_route/auto_route.dart';
+import 'package:nav_poc/pages/IndependentPage.dart';
 import 'package:nav_poc/pages/main_cat1/main_cat1.dart';
 import 'package:nav_poc/pages/main_cat1/sub_cat/main1_sub_cat1.dart';
 import 'package:nav_poc/pages/main_cat1/sub_cat/main1_sub_cat2.dart';
@@ -6,6 +7,7 @@ import 'package:nav_poc/pages/main_cat2/main_cat2.dart';
 import 'package:nav_poc/pages/main_cat2/sub_cat/main2_sub_cat1.dart';
 import 'package:nav_poc/pages/main_cat2/sub_cat/main2_sub_cat2.dart';
 import 'package:nav_poc/pages/main_cat3/main_cat3.dart';
+import 'package:nav_poc/pages/root_layout.dart';
 
 part 'app_router.gr.dart';
 
@@ -21,44 +23,37 @@ enum AppRoutes {
 
 @AutoRouterConfig(replaceInRouteName: 'Page|Screen|Tab,Route')
 class AppRouter extends RootStackRouter {
+
   @override
   List<AutoRoute> get routes => [
-    // Use custom transitions to remove animation
-    CustomRoute(
-      path: '/${AppRoutes.mainCat1.name}',
-      page: MainCat1Route.page,
+    // Root layout that contains the persistent drawer
+    AutoRoute(
+      path: '/',
+      page: RootLayoutRoute.page,
       initial: true,
-      transitionsBuilder: TransitionsBuilders.noTransition,
-    ),
-    CustomRoute(
-      path: '/${AppRoutes.main1SubCat1.name}',
-      page: Main1SubCat1Route.page,
-      transitionsBuilder: TransitionsBuilders.noTransition,
-    ),
-    CustomRoute(
-      path: '/${AppRoutes.main1SubCat2.name}',
-      page: Main1SubCat2Route.page,
-      transitionsBuilder: TransitionsBuilders.noTransition,
-    ),
-    CustomRoute(
-      path: '/${AppRoutes.mainCat2.name}',
-      page: MainCat2Route.page,
-      transitionsBuilder: TransitionsBuilders.noTransition,
-    ),
-    CustomRoute(
-      path: '/${AppRoutes.main2SubCat1.name}',
-      page: Main2SubCat1Route.page,
-      transitionsBuilder: TransitionsBuilders.noTransition,
-    ),
-    CustomRoute(
-      path: '/${AppRoutes.main2SubCat2.name}',
-      page: Main2SubCat2Route.page,
-      transitionsBuilder: TransitionsBuilders.noTransition,
-    ),
-    CustomRoute(
-      path: '/${AppRoutes.mainCat3.name}',
-      page: MainCat3Route.page,
-      transitionsBuilder: TransitionsBuilders.noTransition,
+      children: [
+        // Main categories and subcategories as nested routes
+        AutoRoute(
+          path: 'mainCat1',
+          page: MainCat1Route.page,
+          children: [
+            RedirectRoute(path: '', redirectTo: 'sub1'),
+            AutoRoute(path: 'sub1', page: Main1SubCat1Route.page),
+            AutoRoute(path: 'sub2', page: Main1SubCat2Route.page),
+          ],
+        ),
+        AutoRoute(
+          path: 'mainCat2',
+          page: MainCat2Route.page,
+          children: [
+            RedirectRoute(path: '', redirectTo: 'sub1'),
+            AutoRoute(path: 'sub1', page: Main2SubCat1Route.page),
+            AutoRoute(path: 'sub2', page: Main2SubCat2Route.page),
+          ],
+        ),
+        AutoRoute(path: 'mainCat3', page: MainCat3Route.page),
+        AutoRoute(path: 'independent', page: IndependentRoute.page),
+      ],
     ),
   ];
 }

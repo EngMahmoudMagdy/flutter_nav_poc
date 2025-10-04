@@ -31,7 +31,6 @@ class _MasterDetailScaffoldState extends State<MasterDetailScaffold> {
         ),
       ),
       body: isLargeScreen ? _buildDesktopLayout(context) : _buildMobileLayout(context),
-      drawer: isLargeScreen ? null : const AppDrawer(),
     );
   }
 

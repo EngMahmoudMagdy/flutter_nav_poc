@@ -1,22 +1,20 @@
 import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
-import 'package:nav_poc/master_details_page.dart';
 
 @RoutePage()
-class Main2SubCat1Page extends StatelessWidget {
-  const Main2SubCat1Page({super.key});
+class IndependentPage extends StatelessWidget {
+  const IndependentPage({super.key});
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      color: Colors.red.withAlpha(20),
-      child: Column(
+    return Scaffold(
+      appBar: AppBar(title: Text('Independent page')),
+      body: Column(
         mainAxisAlignment: MainAxisAlignment.center,
-        crossAxisAlignment: CrossAxisAlignment.center,
         children: [
           Center(
             child: Text(
-              'Main 2 Sub Cat 1 page',
+              'Independent page',
               style: TextStyle(color: Colors.teal, fontSize: 22),
             ),
           ),

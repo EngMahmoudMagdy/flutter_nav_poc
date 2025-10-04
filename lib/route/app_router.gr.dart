@@ -11,6 +11,22 @@
 part of 'app_router.dart';
 
 /// generated route for
+/// [IndependentPage]
+class IndependentRoute extends PageRouteInfo<void> {
+  const IndependentRoute({List<PageRouteInfo>? children})
+    : super(IndependentRoute.name, initialChildren: children);
+
+  static const String name = 'IndependentRoute';
+
+  static PageInfo page = PageInfo(
+    name,
+    builder: (data) {
+      return const IndependentPage();
+    },
+  );
+}
+
+/// generated route for
 /// [Main1SubCat1Page]
 class Main1SubCat1Route extends PageRouteInfo<void> {
   const Main1SubCat1Route({List<PageRouteInfo>? children})
@@ -118,6 +134,22 @@ class MainCat3Route extends PageRouteInfo<void> {
     name,
     builder: (data) {
       return const MainCat3Page();
+    },
+  );
+}
+
+/// generated route for
+/// [RootLayoutPage]
+class RootLayoutRoute extends PageRouteInfo<void> {
+  const RootLayoutRoute({List<PageRouteInfo>? children})
+    : super(RootLayoutRoute.name, initialChildren: children);
+
+  static const String name = 'RootLayoutRoute';
+
+  static PageInfo page = PageInfo(
+    name,
+    builder: (data) {
+      return const RootLayoutPage();
     },
   );
 }
