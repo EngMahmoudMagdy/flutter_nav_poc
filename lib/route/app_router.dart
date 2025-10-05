@@ -23,7 +23,6 @@ enum AppRoutes {
 
 @AutoRouterConfig(replaceInRouteName: 'Page|Screen|Tab,Route')
 class AppRouter extends RootStackRouter {
-
   @override
   List<AutoRoute> get routes => [
     // Root layout that contains the persistent drawer
@@ -37,8 +36,11 @@ class AppRouter extends RootStackRouter {
           path: 'mainCat1',
           page: MainCat1Route.page,
           children: [
-            RedirectRoute(path: '', redirectTo: 'sub1'),
-            AutoRoute(path: 'sub1', page: Main1SubCat1Route.page),
+            AutoRoute(
+              path: 'sub1',
+              page: Main1SubCat1Route.page,
+              initial: true,
+            ),
             AutoRoute(path: 'sub2', page: Main1SubCat2Route.page),
           ],
         ),
@@ -46,12 +48,23 @@ class AppRouter extends RootStackRouter {
           path: 'mainCat2',
           page: MainCat2Route.page,
           children: [
-            RedirectRoute(path: '', redirectTo: 'sub1'),
-            AutoRoute(path: 'sub1', page: Main2SubCat1Route.page),
-            AutoRoute(path: 'sub2', page: Main2SubCat2Route.page),
+            AutoRoute(
+              path: 'main2sub1',
+              page: Main2SubCat1Route.page,
+              initial: true,
+            ),
+            AutoRoute(path: 'main2sub2', page: Main2SubCat2Route.page),
           ],
         ),
         AutoRoute(path: 'mainCat3', page: MainCat3Route.page),
+        /*
+        AutoRoute(path: 'main1', page: MainCat1Route.page),
+        AutoRoute(path: 'main1/sub1', page: Main1SubCat1Route.page),
+        AutoRoute(path: 'main1/sub2', page: Main1SubCat2Route.page),
+        AutoRoute(path: 'main2', page: MainCat2Route.page),
+        AutoRoute(path: 'main2/sub1', page: Main2SubCat1Route.page),
+        AutoRoute(path: 'main2/sub2', page: Main2SubCat2Route.page),
+        AutoRoute(path: 'main3', page: MainCat3Route.page),*/
         AutoRoute(path: 'independent', page: IndependentRoute.page),
       ],
     ),

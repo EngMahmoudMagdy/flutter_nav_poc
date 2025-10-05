@@ -56,7 +56,7 @@ class AppDrawer extends StatelessWidget {
                   Icons.arrow_forward_ios,
                   () => _navigateToSubCategory(
                     context,
-                    const Main1SubCat1Route(),
+                    MainCat1Route(children: [const Main1SubCat1Route()]),
                   ),
                   indent: 16.0,
                 ),
@@ -66,7 +66,7 @@ class AppDrawer extends StatelessWidget {
                   Icons.arrow_forward_ios,
                   () => _navigateToSubCategory(
                     context,
-                    const Main1SubCat2Route(),
+                    MainCat1Route(children: [const Main1SubCat2Route()]),
                   ),
                   indent: 16.0,
                 ),
@@ -84,7 +84,7 @@ class AppDrawer extends StatelessWidget {
                   Icons.arrow_forward_ios,
                   () => _navigateToSubCategory(
                     context,
-                    const Main2SubCat1Route(),
+                    MainCat2Route(children: [const Main2SubCat1Route()]),
                   ),
                   indent: 16.0,
                 ),
@@ -94,7 +94,7 @@ class AppDrawer extends StatelessWidget {
                   Icons.arrow_forward_ios,
                   () => _navigateToSubCategory(
                     context,
-                    const Main2SubCat2Route(),
+                    MainCat2Route(children: [const Main2SubCat2Route()]),
                   ),
                   indent: 16.0,
                 ),
