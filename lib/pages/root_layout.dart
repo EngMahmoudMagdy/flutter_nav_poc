@@ -17,13 +17,11 @@ class RootLayoutPage extends StatelessWidget {
           Flexible(child: const AppDrawer()),
 
           // Vertical divider
-          Container(
-            width: 1,
-            color: Colors.grey.shade300,
-          ),
+          Container(width: 1, color: Colors.grey.shade300),
 
           // Content area on the right
           Expanded(
+            flex: 3,
             child: Container(
               color: Colors.grey.shade50,
               child: const AutoRouter(), // This will show the current page

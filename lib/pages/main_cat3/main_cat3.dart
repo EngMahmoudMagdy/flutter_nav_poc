@@ -1,6 +1,5 @@
 import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
-import 'package:nav_poc/master_details_page.dart';
 
 @RoutePage()
 class MainCat3Page extends StatelessWidget {

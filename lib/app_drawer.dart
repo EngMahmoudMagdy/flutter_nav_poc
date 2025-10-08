@@ -2,9 +2,14 @@ import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
 import 'package:nav_poc/route/app_router.dart';
 
-class AppDrawer extends StatelessWidget {
+class AppDrawer extends StatefulWidget {
   const AppDrawer({super.key});
 
+  @override
+  State<AppDrawer> createState() => _AppDrawerState();
+}
+
+class _AppDrawerState extends State<AppDrawer> {
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -116,11 +121,19 @@ class AppDrawer extends StatelessWidget {
 
   // Or use replace to change the main content:
   void _navigateToMainCategory(BuildContext context, PageRouteInfo route) {
-    context.router.push(route);
+    lastRoute = route;
+    context.router.replace(route);
   }
 
+  PageRouteInfo? lastRoute;
+
   void _navigateToSubCategory(BuildContext context, PageRouteInfo route) {
-    context.router.push(route);
+    if (lastRoute == route) {
+      context.router.push(route);
+    } else {
+      lastRoute = route;
+      context.router.replace(route);
+    }
   }
 
   Widget _buildSectionHeader(String title) {
