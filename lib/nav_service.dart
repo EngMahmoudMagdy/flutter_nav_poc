@@ -1,86 +1,57 @@
-import 'package:flutter/material.dart';
+// lib/nav_service.dart
+import 'package:auto_route/auto_route.dart';
+import 'package:nav_poc/route/app_router.dart';
 
-/// A singleton navigation service to handle app-wide navigation logic.
+/// A singleton navigation service to work with auto_route.
 ///
-/// This service allows navigating to different parts of the app, such as
-/// main categories or specific subcategories, using their route names. It can
-/// be accessed from anywhere in the app without needing a BuildContext.
+/// This service allows navigating from anywhere in the app (e.g., from
+/// providers or business logic classes) without needing a BuildContext,
+/// while leveraging the type-safe routing from auto_route.
 class NavService {
-  /// A global key for the navigator state, allowing navigation from anywhere.
-  ///
-  /// This key must be assigned to the `navigatorKey` property of your
-  /// `MaterialApp` or `CupertinoApp`.
-  final GlobalKey<NavigatorState> navigatorKey = GlobalKey<NavigatorState>();
+  // The single, static instance of the AppRouter.
+  // This will be initialized in main.dart.
+  late final AppRouter _appRouter;
 
-  // 1. Private constructor for the singleton pattern.
+  // Private constructor for the singleton pattern.
   NavService._privateConstructor();
 
-  // 2. The single, static instance of the NavService.
+  // The static instance of the NavService.
   static final NavService _instance = NavService._privateConstructor();
 
-  // 3. The public factory constructor that returns the instance.
-  /// Provides access to the singleton instance of the [NavService].
+  // The public factory constructor that returns the singleton instance.
   factory NavService() {
     return _instance;
   }
 
-  /// Navigates to a main category screen.
-  ///
-  /// Uses the provided [routeName] to push a new named route onto the stack.
-  /// Example: NavService().navigateToMainCategory('/categories');
-  Future<T?>? navigateToMainCategory<T extends Object?>(String routeName, {Object? arguments}) {
-    // Check if the navigator can be used.
-    if (navigatorKey.currentState != null) {
-      return navigatorKey.currentState!.pushNamed<T>(
-        routeName,
-        arguments: arguments,
-      );
-    }
-    _logNavigationError(routeName);
-    return null;
+  /// Initializes the NavService with the app's router instance.
+  /// This MUST be called in main.dart before the app runs.
+  void setRouter(AppRouter router) {
+    _appRouter = router;
   }
 
-  /// Navigates to a subcategory screen.
+  /// Navigates to a main category screen using a type-safe route.
   ///
-  /// This is functionally similar to [navigateToMainCategory] but provides
-  /// semantic clarity for navigating to more specific content.
-  /// Example: NavService().navigateToSubcategory('/category/electronics');
-  Future<T?>? navigateToSubcategory<T extends Object?>(String routeName, {Object? arguments}) {
-    if (navigatorKey.currentState != null) {
-      return navigatorKey.currentState!.pushNamed<T>(
-        routeName,
-        arguments: arguments,
-      );
-    }
-    _logNavigationError(routeName);
-    return null;
+  /// Example: NavService().navigateToMainCategory(CategoryARoute());
+  Future<T?> navigateToMainCategory<T extends Object?>(
+      {required PageRouteInfo route}) {
+    return _appRouter.push<T>(route);
   }
 
-  /// A generic navigation function to push a named route.
+  /// Navigates to a subcategory screen using a type-safe route.
   ///
-  /// This can be used for any route that doesn't fit the category/subcategory model.
-  Future<T?>? navigateTo<T extends Object?>(String routeName, {Object? arguments}) {
-    if (navigatorKey.currentState != null) {
-      return navigatorKey.currentState!.pushNamed<T>(
-        routeName,
-        arguments: arguments,
-      );
-    }
-    _logNavigationError(routeName);
-    return null;
+  /// Example: NavService().navigateToSubcategory(route: SubCategoryXRoute());
+  Future<T?> navigateToSubcategory<T extends Object?>(
+      {required PageRouteInfo route}) {
+    return _appRouter.push<T>(route);
+  }
+
+  /// A generic navigation function to push any type-safe route.
+  Future<T?> navigateTo<T extends Object?>({required PageRouteInfo route}) {
+    return _appRouter.push<T>(route);
   }
 
   /// Pops the current route off the navigator stack.
-  void goBack<T extends Object?>([T? result]) {
-    if (navigatorKey.currentState != null) {
-      navigatorKey.currentState!.pop<T>(result);
-    }
-  }
-
-  /// Helper function to log an error if navigation fails.
-  void _logNavigationError(String routeName) {
-    // In a real app, you might use a logging framework like 'logger'.
-    debugPrint('Navigation Error: Could not navigate to "$routeName". The navigatorKey.currentState is null.');
-    debugPrint('Ensure you have assigned the navigatorKey to your MaterialApp.');
+  Future<void> goBack<T extends Object?>([T? result]) async {
+    return _appRouter.pop<T>(result);
   }
 }

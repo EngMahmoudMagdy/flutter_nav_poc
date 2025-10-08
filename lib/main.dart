@@ -1,7 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:nav_poc/nav_service.dart';
 import 'package:nav_poc/route/app_router.dart';
 
+final _appRouter = AppRouter();
 void main() {
+  NavService().setRouter(_appRouter);
   runApp(const MyApp());
 }
 
@@ -14,7 +17,7 @@ class MyApp extends StatelessWidget {
     return MaterialApp.router(
       title: 'Navigation POC',
       theme: _buildLightTheme(),
-      routerConfig: AppRouter().config(),
+      routerConfig: _appRouter.config(),
     );
   }
 
