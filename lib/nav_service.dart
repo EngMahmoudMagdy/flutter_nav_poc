@@ -95,45 +95,40 @@ class NavService {
     BuildContext context, {
     required SubCategory subCategory,
   }) async {
-    final currentTopPagePathName = _getCurrentPath(context);
-    print("currentMainCategory $currentMainCategory");
-    print("currentSubCategory $currentSubCategory");
-    print("currentTopPagePathName $currentTopPagePathName");
-    if (currentSubCategory?.mainCategory == subCategory.mainCategory &&
-        currentTopPagePathName != subCategory.mainCategory.routePath) {
-      currentSubCategory = subCategory;
+    final currentPath = _getCurrentPath(context);
+    final isSameMainCategory =
+        currentSubCategory?.mainCategory == subCategory.mainCategory;
+    final isOldSubCategoryExist = currentSubCategory != null;
+
+    currentSubCategory = subCategory;
+
+    if (isSameMainCategory &&
+        currentPath != subCategory.mainCategory.routePath) {
+      // Replace subcategory within same main category
       return _safeNavigate<T?>(
         () => _appRouter.replacePath<T>(subCategory.routePath),
       );
-    } else if (currentMainCategory != subCategory.mainCategory) {
-      currentMainCategory = subCategory.mainCategory;
-      if (currentSubCategory != null) {
-        currentSubCategory = subCategory;
-        _safeNavigate<T?>(() {
-          _appRouter.popTop();
-          return Future.value();
-        });
-        return _safeNavigate<T?>(() async {
-          _appRouter.popAndPush(subCategory.mainCategory.route);
-          _appRouter.push(subCategory.route);
-          return Future.value();
-        });
-      } else {
-        _safeNavigate<T?>(() {
-          _appRouter.popAndPush(subCategory.mainCategory.route);
-          return Future.value();
-        });
-        await _safeNavigate<T?>(
-          () => _appRouter.pushPath<T>(subCategory.routePath),
-        );
-      }
-    } else {
-      currentSubCategory = subCategory;
-      return _safeNavigate<T?>(
-        () => _appRouter.pushPath<T>(subCategory.routePath),
-      );
     }
-    return Future.value();
+
+    if (!isSameMainCategory) {
+      // Switch to different main category
+      currentMainCategory = subCategory.mainCategory;
+      return _safeNavigate<T?>(() async {
+        if (isOldSubCategoryExist) {
+          await _safeNavigate<T?>(() {
+            _appRouter.popTop();
+            return Future.value();
+          });
+        }
+        _appRouter.popAndPush(subCategory.mainCategory.route);
+        return _appRouter.push<T>(subCategory.route);
+      });
+    }
+
+    // Default: Push new subcategory
+    return _safeNavigate<T?>(
+      () => _appRouter.pushPath<T>(subCategory.routePath),
+    );
   }
 
   String _getCurrentPath(BuildContext context) {
