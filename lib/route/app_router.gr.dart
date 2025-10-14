@@ -59,6 +59,38 @@ class Main1SubCat2Route extends PageRouteInfo<void> {
 }
 
 /// generated route for
+/// [Main1SubCat3Page]
+class Main1SubCat3Route extends PageRouteInfo<void> {
+  const Main1SubCat3Route({List<PageRouteInfo>? children})
+    : super(Main1SubCat3Route.name, initialChildren: children);
+
+  static const String name = 'Main1SubCat3Route';
+
+  static PageInfo page = PageInfo(
+    name,
+    builder: (data) {
+      return const Main1SubCat3Page();
+    },
+  );
+}
+
+/// generated route for
+/// [Main2ContentPage]
+class Main2ContentRoute extends PageRouteInfo<void> {
+  const Main2ContentRoute({List<PageRouteInfo>? children})
+    : super(Main2ContentRoute.name, initialChildren: children);
+
+  static const String name = 'Main2ContentRoute';
+
+  static PageInfo page = PageInfo(
+    name,
+    builder: (data) {
+      return const Main2ContentPage();
+    },
+  );
+}
+
+/// generated route for
 /// [Main2SubCat1Page]
 class Main2SubCat1Route extends PageRouteInfo<void> {
   const Main2SubCat1Route({List<PageRouteInfo>? children})
@@ -139,6 +171,22 @@ class MainCat3Route extends PageRouteInfo<void> {
 }
 
 /// generated route for
+/// [MainContentPage]
+class MainContentRoute extends PageRouteInfo<void> {
+  const MainContentRoute({List<PageRouteInfo>? children})
+    : super(MainContentRoute.name, initialChildren: children);
+
+  static const String name = 'MainContentRoute';
+
+  static PageInfo page = PageInfo(
+    name,
+    builder: (data) {
+      return const MainContentPage();
+    },
+  );
+}
+
+/// generated route for
 /// [RootLayoutPage]
 class RootLayoutRoute extends PageRouteInfo<void> {
   const RootLayoutRoute({List<PageRouteInfo>? children})
@@ -150,6 +198,22 @@ class RootLayoutRoute extends PageRouteInfo<void> {
     name,
     builder: (data) {
       return const RootLayoutPage();
+    },
+  );
+}
+
+/// generated route for
+/// [VacationRequestPage]
+class VacationRequestRoute extends PageRouteInfo<void> {
+  const VacationRequestRoute({List<PageRouteInfo>? children})
+    : super(VacationRequestRoute.name, initialChildren: children);
+
+  static const String name = 'VacationRequestRoute';
+
+  static PageInfo page = PageInfo(
+    name,
+    builder: (data) {
+      return const VacationRequestPage();
     },
   );
 }

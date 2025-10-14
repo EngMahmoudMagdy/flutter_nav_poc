@@ -1,5 +1,6 @@
 import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
+import 'package:nav_poc/route/app_router.dart';
 
 @RoutePage()
 class Main2SubCat2Page extends StatelessWidget {
@@ -17,6 +18,16 @@ class Main2SubCat2Page extends StatelessWidget {
             child: Text(
               'Main 2 Sub Cat 2 page',
               style: TextStyle(color: Colors.teal, fontSize: 22),
+            ),
+          ),
+          SizedBox(height: 32),
+          ElevatedButton(
+            onPressed: () {
+              context.router.push(VacationRequestRoute());
+            },
+            child: Text(
+              'Go to\nVacation Request page',
+              textAlign: TextAlign.center,
             ),
           ),
         ],

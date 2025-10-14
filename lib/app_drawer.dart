@@ -1,6 +1,5 @@
-import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
-import 'package:nav_poc/route/app_router.dart';
+import 'package:nav_poc/nav_service.dart';
 
 class AppDrawer extends StatefulWidget {
   const AppDrawer({super.key});
@@ -53,54 +52,48 @@ class _AppDrawerState extends State<AppDrawer> {
                   context,
                   'Main Cat1 - Home',
                   Icons.home,
-                  () => _navigateToMainCategory(context, const MainCat1Route()),
+                  () => _navigateToMainCategory(MainCategory.category1),
                 ),
                 _buildDrawerItem(
                   context,
                   'Sub Cat1.1',
                   Icons.arrow_forward_ios,
-                  () => _navigateToSubCategory(
-                    context,
-                    MainCat1Route(children: [const Main1SubCat1Route()]),
-                  ),
+                  () => _navigateToSubCategory(SubCategory.sub1Main1),
                   indent: 16.0,
                 ),
                 _buildDrawerItem(
                   context,
                   'Sub Cat1.2',
                   Icons.arrow_forward_ios,
-                  () => _navigateToSubCategory(
-                    context,
-                    MainCat1Route(children: [const Main1SubCat2Route()]),
-                  ),
+                  () => _navigateToSubCategory(SubCategory.sub2Main1),
                   indent: 16.0,
                 ),
-
+                _buildDrawerItem(
+                  context,
+                  'Sub Cat1.3',
+                  Icons.arrow_forward_ios,
+                  () => _navigateToSubCategory(SubCategory.sub3Main1),
+                  indent: 16.0,
+                ),
                 _buildSectionHeader('Main Category 2'),
                 _buildDrawerItem(
                   context,
                   'Main Cat2 - Home',
                   Icons.business,
-                  () => _navigateToMainCategory(context, const MainCat2Route()),
+                  () => _navigateToMainCategory(MainCategory.category2),
                 ),
                 _buildDrawerItem(
                   context,
                   'Sub Cat2.1',
                   Icons.arrow_forward_ios,
-                  () => _navigateToSubCategory(
-                    context,
-                    MainCat2Route(children: [const Main2SubCat1Route()]),
-                  ),
+                  () => _navigateToSubCategory(SubCategory.sub1Main2),
                   indent: 16.0,
                 ),
                 _buildDrawerItem(
                   context,
                   'Sub Cat2.2',
                   Icons.arrow_forward_ios,
-                  () => _navigateToSubCategory(
-                    context,
-                    MainCat2Route(children: [const Main2SubCat2Route()]),
-                  ),
+                  () => _navigateToSubCategory(SubCategory.sub2Main2),
                   indent: 16.0,
                 ),
 
@@ -109,7 +102,7 @@ class _AppDrawerState extends State<AppDrawer> {
                   context,
                   'Main Cat3',
                   Icons.category,
-                  () => _navigateToMainCategory(context, const MainCat3Route()),
+                  () => _navigateToMainCategory(MainCategory.category3),
                 ),
               ],
             ),
@@ -120,20 +113,12 @@ class _AppDrawerState extends State<AppDrawer> {
   }
 
   // Or use replace to change the main content:
-  void _navigateToMainCategory(BuildContext context, PageRouteInfo route) {
-    lastRoute = route;
-    context.router.replace(route);
+  void _navigateToMainCategory(MainCategory mainCategory) {
+    NavService().navigateToMainCategory(mainCategory: mainCategory);
   }
 
-  PageRouteInfo? lastRoute;
-
-  void _navigateToSubCategory(BuildContext context, PageRouteInfo route) {
-    if (lastRoute == route) {
-      context.router.push(route);
-    } else {
-      lastRoute = route;
-      context.router.replace(route);
-    }
+  void _navigateToSubCategory(SubCategory subCategory) {
+    NavService().navigateToSubcategory(context,subCategory: subCategory);
   }
 
   Widget _buildSectionHeader(String title) {

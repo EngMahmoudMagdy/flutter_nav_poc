@@ -2,8 +2,8 @@ import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
 
 @RoutePage()
-class Main1SubCat2Page extends StatelessWidget {
-  const Main1SubCat2Page({super.key});
+class Main2ContentPage extends StatelessWidget {
+  const Main2ContentPage({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -16,14 +16,13 @@ class Main1SubCat2Page extends StatelessWidget {
           children: [
             Center(
               child: Text(
-                'Main 1 Sub Cat 2 page',
-                style: TextStyle(color: Colors.deepPurple, fontSize: 22),
+                'Main 2 Content page',
+                style: TextStyle(color: Colors.black, fontSize: 22),
               ),
             ),
           ],
         ),
       ),
-      appBar: AppBar(title: Text('Cat 2'), backgroundColor: Colors.green),
     );
   }
 }
