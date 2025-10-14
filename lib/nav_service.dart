@@ -1,4 +1,6 @@
 // lib/nav_service.dart
+import 'dart:async';
+
 import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
 import 'package:nav_poc/route/app_router.dart';
@@ -103,28 +105,35 @@ class NavService {
       return _safeNavigate<T?>(
         () => _appRouter.replacePath<T>(subCategory.routePath),
       );
-    }
-    if (currentMainCategory != subCategory.mainCategory) {
+    } else if (currentMainCategory != subCategory.mainCategory) {
       currentMainCategory = subCategory.mainCategory;
       if (currentSubCategory != null) {
         currentSubCategory = subCategory;
         _safeNavigate<T?>(() {
-          _appRouter.popTop<T>();
+          _appRouter.popTop();
+          return Future.value();
+        });
+        return _safeNavigate<T?>(() async {
+          _appRouter.popAndPush(subCategory.mainCategory.route);
+          _appRouter.push(subCategory.route);
+          return Future.value();
+        });
+      } else {
+        _safeNavigate<T?>(() {
+          _appRouter.popAndPush(subCategory.mainCategory.route);
           return Future.value();
         });
         await _safeNavigate<T?>(
-          () => _appRouter.replacePath<T>(subCategory.mainCategory.routePath),
-        );
-      } else {
-        await _safeNavigate<T?>(
-          () => _appRouter.pushPath<T>(subCategory.mainCategory.routePath),
+          () => _appRouter.pushPath<T>(subCategory.routePath),
         );
       }
+    } else {
+      currentSubCategory = subCategory;
+      return _safeNavigate<T?>(
+        () => _appRouter.pushPath<T>(subCategory.routePath),
+      );
     }
-    currentSubCategory = subCategory;
-    return _safeNavigate<T?>(
-      () => _appRouter.pushPath<T>(subCategory.routePath),
-    );
+    return Future.value();
   }
 
   String _getCurrentPath(BuildContext context) {
@@ -168,29 +177,31 @@ class NavService {
 }
 
 enum MainCategory {
-  category1('mainCat1'),
-  category2('mainCat2'),
-  category3('mainCat3');
+  category1('mainCat1', MainCat1Route()),
+  category2('mainCat2', MainCat2Route()),
+  category3('mainCat3', MainCat3Route());
 
-  const MainCategory(this.routePath);
+  const MainCategory(this.routePath, this.route);
 
   final String routePath;
+  final PageRouteInfo route;
 }
 
 enum SubCategory {
   // Category 1 subcategories
-  sub1Main1(MainCategory.category1, 'sub1Main1'),
-  sub2Main1(MainCategory.category1, 'sub2Main1'),
-  sub3Main1(MainCategory.category1, 'sub3Main1'),
+  sub1Main1(MainCategory.category1, 'sub1Main1', Main1SubCat1Route()),
+  sub2Main1(MainCategory.category1, 'sub2Main1', Main1SubCat2Route()),
+  sub3Main1(MainCategory.category1, 'sub3Main1', Main1SubCat3Route()),
 
   // Category 2 subcategories
-  sub1Main2(MainCategory.category2, 'sub1Main2'),
-  sub2Main2(MainCategory.category2, 'sub2Main2');
+  sub1Main2(MainCategory.category2, 'sub1Main2', Main2SubCat1Route()),
+  sub2Main2(MainCategory.category2, 'sub2Main2', Main2SubCat2Route());
 
-  const SubCategory(this.mainCategory, this.routePath);
+  const SubCategory(this.mainCategory, this.routePath, this.route);
 
   final MainCategory mainCategory;
   final String routePath;
+  final PageRouteInfo route;
 }
 
 // Helper extension
