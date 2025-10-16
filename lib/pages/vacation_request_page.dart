@@ -98,7 +98,7 @@ class _VacationRequestPageState extends State<VacationRequestPage>
   }
 
   @override
-  Widget build(BuildContext context) {
+  Widget buildWithProtection(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
         title: const Text('Vacation Request'),

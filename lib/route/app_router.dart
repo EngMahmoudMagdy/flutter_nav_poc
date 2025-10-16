@@ -39,6 +39,7 @@ class AppRouter extends RootStackRouter {
         AutoRoute(
           path: 'mainCat1',
           page: MainCat1Route.page,
+          initial: true,
           children: [
             AutoRoute(
               path: 'main1Content',

@@ -2,10 +2,29 @@
 import 'package:flutter/material.dart';
 import 'package:auto_route/auto_route.dart';
 import 'package:nav_poc/app_drawer.dart';
+import 'package:nav_poc/nav_service.dart';
+import 'package:nav_poc/route/app_router.dart';
 
 @RoutePage()
-class RootLayoutPage extends StatelessWidget {
+class RootLayoutPage extends StatefulWidget {
   const RootLayoutPage({super.key});
+
+  @override
+  State<RootLayoutPage> createState() => _RootLayoutPageState();
+}
+
+class _RootLayoutPageState extends State<RootLayoutPage> {
+  @override
+  void initState() {
+    super.initState();
+
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      NavService().setRouter(
+        context.innerRouterOf<StackRouter>(RootLayoutRoute.name) ??
+            context.router,
+      );
+    });
+  }
 
   @override
   Widget build(BuildContext context) {

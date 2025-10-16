@@ -114,11 +114,17 @@ class _AppDrawerState extends State<AppDrawer> {
 
   // Or use replace to change the main content:
   void _navigateToMainCategory(MainCategory mainCategory) {
-    NavService().navigateToMainCategory(mainCategory: mainCategory);
+    NavService().navigateToMainCategory(
+      context: context,
+      mainCategory: mainCategory,
+    );
   }
 
   void _navigateToSubCategory(SubCategory subCategory) {
-    NavService().navigateToSubcategory(context,subCategory: subCategory);
+    NavService().navigateToSubcategory(
+      context: context,
+      subCategory: subCategory,
+    );
   }
 
   Widget _buildSectionHeader(String title) {

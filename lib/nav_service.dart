@@ -13,7 +13,9 @@ import 'package:nav_poc/route/app_router.dart';
 class NavService {
   // The single, static instance of the AppRouter.
   // This will be initialized in main.dart.
-  late final AppRouter _appRouter;
+  late final StackRouter _appRouter;
+
+  bool _appRouterInitialized = false;
 
   // Navigation guard callback
   Future<bool> Function()? _onNavigationRequested;
@@ -30,9 +32,12 @@ class NavService {
   }
 
   /// Initializes the NavService with the app's router instance.
-  /// This MUST be called in main.dart before the app runs.
-  void setRouter(AppRouter router) {
-    _appRouter = router;
+  /// This MUST be called in RootLayoutRouter page before the app runs.
+  void setRouter(StackRouter router) {
+    if (!_appRouterInitialized) {
+      _appRouter = router;
+      _appRouterInitialized = true;
+    }
   }
 
   /// Sets a global navigation guard callback
@@ -67,14 +72,18 @@ class NavService {
 
   /// Navigates to a main category screen using Enum.
   Future<T?> navigateToMainCategory<T extends Object?>({
+    required BuildContext context,
     required MainCategory mainCategory,
   }) {
-    if (currentSubCategory != null) {
+    final isMainCategoryShown = _isMainCategoryShown(context);
+    if (currentSubCategory != null && !isMainCategoryShown) {
       _safeNavigate<T?>(() {
         _appRouter.popTop<T>();
         return Future.value();
       });
     }
+    print("currentMainCategory ${currentMainCategory?.routePath}");
+    print("mainCategory ${mainCategory.routePath}");
     if (currentMainCategory != mainCategory) {
       currentMainCategory = mainCategory;
       currentSubCategory = null;
@@ -82,6 +91,7 @@ class NavService {
         () => _appRouter.replacePath<T>(mainCategory.routePath),
       );
     }
+
     return _safeNavigate<T?>(() => Future.value());
   }
 
@@ -91,41 +101,102 @@ class NavService {
   var isInitial = true;
 
   /// Navigates to a subcategory screen using a type-safe route.
-  Future<T?> navigateToSubcategory<T extends Object?>(
-    BuildContext context, {
+  Future<T?> navigateToSubcategory<T extends Object?>({
+    required BuildContext context,
     required SubCategory subCategory,
   }) async {
     final currentPath = _getCurrentPath(context);
+    print('Current path: $currentPath');
+    print('Subcategory path: ${subCategory.routePath}');
     final isSameMainCategory =
         currentSubCategory?.mainCategory == subCategory.mainCategory;
-    final isOldSubCategoryExist = currentSubCategory != null;
+    final isSameSubCategory = currentSubCategory == subCategory;
+    final isOnSubCategoryPage = currentPath == subCategory.routePath;
+    final isOnSameMainCategoryPage =
+        currentPath == subCategory.mainCategory.routePath;
+
+    final isMainCategoryShown =
+        _isMainCategoryShown(context) && isOnSameMainCategoryPage;
 
     currentSubCategory = subCategory;
+    currentMainCategory = subCategory.mainCategory;
 
-    if (isSameMainCategory &&
-        currentPath != subCategory.mainCategory.routePath) {
-      // Replace subcategory within same main category
-      return _safeNavigate<T?>(
-        () => _appRouter.replacePath<T>(subCategory.routePath),
-      );
+    // Case 1: Clicking the same subcategory in drawer - pop to existing instance
+    if(isOnSubCategoryPage) {
+      return Future.value();
     }
 
+    if (isMainCategoryShown) {
+      print('_pushNewSubCategory');
+      return _pushNewSubCategory<T>(subCategory);
+    }
+
+    // Case 2: Same main category, different subcategory - pop to main category and push new subcategory
+    if (isSameMainCategory && !isSameSubCategory) {
+      return _switchSubCategoryInSameMainCategory<T>(subCategory, context);
+    }
+
+    if (isSameMainCategory && isSameSubCategory) {
+      return _popToExistingSubCategory<T>(subCategory);
+    }
+
+    // Case 3: Different main category - complete stack rebuild
     if (!isSameMainCategory) {
-      // Switch to different main category
-      currentMainCategory = subCategory.mainCategory;
-      return _safeNavigate<T?>(() async {
-        if (isOldSubCategoryExist) {
-          await _safeNavigate<T?>(() {
-            _appRouter.popTop();
-            return Future.value();
-          });
-        }
-        _appRouter.popAndPush(subCategory.mainCategory.route);
-        return _appRouter.push<T>(subCategory.route);
-      });
+      return _switchToDifferentMainCategory<T>(subCategory);
     }
 
-    // Default: Push new subcategory
+    // Case 4: Default - push new subcategory
+    if (!isSameSubCategory) {
+      return _pushNewSubCategory<T>(subCategory);
+    }
+
+    return Future.value();
+  }
+
+  Future<T?> _popToExistingSubCategory<T>(SubCategory subCategory) {
+    return _safeNavigate<T?>(() async {
+      // Pop until we reach the existing subcategory page
+      _appRouter.popUntil((route) {
+        print("route.settings.name ${route.settings.name}");
+        print("subCategory ${subCategory.routePath}");
+        return route.settings.name == subCategory.routePath;
+      });
+      return null;
+    });
+  }
+
+  Future<T?> _switchSubCategoryInSameMainCategory<T>(
+    SubCategory subCategory,
+    BuildContext context,
+  ) {
+    return _safeNavigate<T?>(() async {
+      // Pop all pages until main category
+      _appRouter.popUntil((route) {
+        print("route.data?.path ${route.data?.path}");
+        print("mainCategory ${subCategory.mainCategory.routePath}");
+        return route.data?.path == subCategory.mainCategory.routePath;
+      });
+      print('current path: ${_getCurrentPath(context)}');
+      // Push new subcategory
+      return _appRouter.push<T>(subCategory.route);
+    });
+  }
+
+  Future<T?> _switchToDifferentMainCategory<T>(SubCategory subCategory) {
+    return _safeNavigate<T?>(() async {
+      _appRouter.popUntil((route) {
+        return route.isFirst;
+      },);
+      _appRouter.pop();
+      await _appRouter.pushAll([
+        subCategory.mainCategory.route,
+        subCategory.route,
+      ]);
+      return Future.value();
+    });
+  }
+
+  Future<T?> _pushNewSubCategory<T>(SubCategory subCategory) {
     return _safeNavigate<T?>(
       () => _appRouter.pushPath<T>(subCategory.routePath),
     );
@@ -167,6 +238,12 @@ class NavService {
           return false;
         },
       ),
+    );
+  }
+
+  bool _isMainCategoryShown(BuildContext context) {
+    return MainCategory.values.any(
+      (element) => element.routePath == _getCurrentPath(context),
     );
   }
 }

@@ -4,7 +4,6 @@ import 'package:nav_poc/route/app_router.dart';
 
 final _appRouter = AppRouter();
 void main() {
-  NavService().setRouter(_appRouter);
   runApp(const MyApp());
 }
 
