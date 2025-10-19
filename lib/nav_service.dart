@@ -70,15 +70,24 @@ class NavService {
     return _safeNavigate<T?>(() => _appRouter.push<T>(route));
   }
 
+  /// Navigates to a Independent screen using Path.
+  Future<T?> navigateToIndependentWithPath<T extends Object?>({
+    required String routePath,
+  }) {
+    return _safeNavigate<T?>(() => _appRouter.pushPath<T>(routePath));
+  }
+
   /// Navigates to a main category screen using Enum.
   Future<T?> navigateToMainCategory<T extends Object?>({
     required BuildContext context,
     required MainCategory mainCategory,
   }) {
     final isMainCategoryShown = _isMainCategoryShown(context);
-    if (currentSubCategory != null && !isMainCategoryShown) {
+    if (!isMainCategoryShown) {
       _safeNavigate<T?>(() {
-        _appRouter.popTop<T>();
+        _appRouter.popUntil((route) {
+          return route.isFirst;
+        },);
         return Future.value();
       });
     }
@@ -99,6 +108,8 @@ class NavService {
   SubCategory? currentSubCategory;
 
   var isInitial = true;
+
+  bool showBreadcrumb = true;
 
   /// Navigates to a subcategory screen using a type-safe route.
   Future<T?> navigateToSubcategory<T extends Object?>({

@@ -2,6 +2,7 @@ import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
 import 'package:nav_poc/nav_service.dart';
 import 'package:nav_poc/route/app_router.dart';
+import 'package:nav_poc/widgets/bread_crumb_app_bar.dart';
 
 @RoutePage()
 class Main1SubCat1Page extends StatelessWidget {
@@ -25,9 +26,7 @@ class Main1SubCat1Page extends StatelessWidget {
             SizedBox(height: 32),
             ElevatedButton(
               onPressed: () {
-                NavService().navigateToIndependent(
-                  route: IndependentRoute(),
-                );
+                NavService().navigateToIndependent(route: IndependentRoute());
               },
               child: Text(
                 'Go to\nIndependent page',
@@ -49,7 +48,10 @@ class Main1SubCat1Page extends StatelessWidget {
           ],
         ),
       ),
-      appBar: AppBar(title: Text('Cat 1'), backgroundColor: Colors.brown),
+      appBar: BreadcrumbAppBar(
+        title: Text('Cat 1'),
+        backgroundColor: Colors.brown,
+      ),
     );
   }
 }

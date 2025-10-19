@@ -1,5 +1,6 @@
 import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
+import 'package:nav_poc/widgets/bread_crumb_app_bar.dart';
 
 @RoutePage()
 class Main1SubCat2Page extends StatelessWidget {
@@ -23,7 +24,10 @@ class Main1SubCat2Page extends StatelessWidget {
           ],
         ),
       ),
-      appBar: AppBar(title: Text('Cat 2'), backgroundColor: Colors.green),
+      appBar: BreadcrumbAppBar(
+        title: Text('Cat 2'),
+        backgroundColor: Colors.green,
+      ),
     );
   }
 }
