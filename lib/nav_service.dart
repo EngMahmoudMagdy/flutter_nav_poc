@@ -15,6 +15,8 @@ class NavService {
   // This will be initialized in main.dart.
   late final StackRouter _appRouter;
 
+  get appRouter => _appRouter;
+
   bool _appRouterInitialized = false;
 
   // Navigation guard callback
@@ -87,7 +89,7 @@ class NavService {
       _safeNavigate<T?>(() {
         _appRouter.popUntil((route) {
           return route.isFirst;
-        },);
+        });
         return Future.value();
       });
     }
@@ -133,7 +135,7 @@ class NavService {
     currentMainCategory = subCategory.mainCategory;
 
     // Case 1: Clicking the same subcategory in drawer - pop to existing instance
-    if(isOnSubCategoryPage) {
+    if (isOnSubCategoryPage) {
       return Future.value();
     }
 
@@ -189,7 +191,9 @@ class NavService {
       });
       print('current path: ${_getCurrentPath(context)}');
       // Push new subcategory
-      return _appRouter.push<T>(subCategory.route);
+      return await Future.delayed(const Duration(milliseconds: 10), () {
+        _appRouter.push(subCategory.route);
+      });
     });
   }
 
@@ -197,12 +201,15 @@ class NavService {
     return _safeNavigate<T?>(() async {
       _appRouter.popUntil((route) {
         return route.isFirst;
-      },);
+      });
       _appRouter.pop();
-      await _appRouter.pushAll([
-        subCategory.mainCategory.route,
-        subCategory.route,
-      ]);
+      await Future.delayed(Duration.zero, () {
+        _appRouter.push(subCategory.mainCategory.route);
+      });
+
+      await Future.delayed(const Duration(milliseconds: 10), () {
+        _appRouter.push(subCategory.route);
+      });
       return Future.value();
     });
   }

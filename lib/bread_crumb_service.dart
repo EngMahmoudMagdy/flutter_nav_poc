@@ -5,10 +5,12 @@ import 'package:nav_poc/models/bread_crumb_item.dart';
 import 'nav_service.dart';
 
 class BreadcrumbService {
-  final StackRouter _router;
+  late final StackRouter _router;
   final NavService _navService;
 
-  BreadcrumbService(this._router, this._navService);
+  BreadcrumbService(this._navService) {
+    _router = _navService.appRouter;
+  }
 
   /// Get auto-generated breadcrumbs from current stack
   List<BreadcrumbItem> getAutoBreadcrumbs() {

@@ -1,5 +1,3 @@
-// es_bread_crumb.dart
-import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
 import 'package:nav_poc/bread_crumb_service.dart';
 import 'package:nav_poc/models/bread_crumb_item.dart';
@@ -27,20 +25,7 @@ class _EsBreadCrumbState extends State<EsBreadCrumb> {
   void didChangeDependencies() {
     super.didChangeDependencies();
     _navService = NavService();
-    _breadcrumbService = BreadcrumbService(context.router, _navService);
-
-    // Listen to route changes to update breadcrumb
-    context.router.addListener(_onRouteChanged);
-  }
-
-  @override
-  void dispose() {
-    context.router.removeListener(_onRouteChanged);
-    super.dispose();
-  }
-
-  void _onRouteChanged() {
-    setState(() {}); // Rebuild when route changes
+    _breadcrumbService = BreadcrumbService(_navService);
   }
 
   @override
@@ -54,26 +39,21 @@ class _EsBreadCrumbState extends State<EsBreadCrumb> {
       customBreadcrumbs: widget.customBreadcrumbs,
     );
 
-    if (breadcrumbs.length <= 1) {
-      return const SizedBox.shrink();
-    }
-
     return _buildBreadcrumbNavigation(breadcrumbs);
   }
 
   Widget _buildBreadcrumbNavigation(List<BreadcrumbItem> breadcrumbs) {
-    return Container(
-      padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
-      decoration: BoxDecoration(
-        color: Colors.grey.shade50,
-        border: Border.all(color: Colors.grey.shade200),
-      ),
-      child: SingleChildScrollView(
-        scrollDirection: Axis.horizontal,
-        child: Row(
-          children: _buildBreadcrumbItems(breadcrumbs),
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.start,
+      children: [
+        Container(
+          padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+          child: SingleChildScrollView(
+            scrollDirection: Axis.horizontal,
+            child: Row(children: _buildBreadcrumbItems(breadcrumbs)),
+          ),
         ),
-      ),
+      ],
     );
   }
 
@@ -106,9 +86,7 @@ class _EsBreadCrumbState extends State<EsBreadCrumb> {
 
   Widget _buildBreadcrumbItem(BreadcrumbItem item, bool isLast) {
     return GestureDetector(
-      onTap: item.isClickable
-          ? () => _onBreadcrumbTap(item)
-          : null,
+      onTap: item.isClickable ? () => _onBreadcrumbTap(item) : null,
       child: MouseRegion(
         cursor: item.isClickable
             ? SystemMouseCursors.click
@@ -117,19 +95,16 @@ class _EsBreadCrumbState extends State<EsBreadCrumb> {
           padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
           decoration: BoxDecoration(
             color: item.isClickable
-                ? Theme.of(context).primaryColor.withOpacity(0.1)
+                ? Theme.of(context).primaryColor.withAlpha(25)
                 : Colors.transparent,
             borderRadius: BorderRadius.circular(6),
-            border: isLast
-                ? Border.all(color: Theme.of(context).primaryColor.withOpacity(0.3))
-                : null,
           ),
           child: Text(
             item.name,
             style: TextStyle(
               color: item.isClickable
-                  ? Theme.of(context).primaryColor
-                  : Colors.grey.shade700,
+                  ? Colors.black
+                  : Colors.grey.shade900,
               fontWeight: isLast ? FontWeight.w600 : FontWeight.normal,
               fontSize: 14,
             ),

@@ -1,5 +1,6 @@
 import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
+import 'package:nav_poc/widgets/bread_crumb_app_bar.dart';
 
 @RoutePage()
 class IndependentPage extends StatelessWidget {
@@ -8,7 +9,7 @@ class IndependentPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: Text('Independent page')),
+      appBar: BreadcrumbAppBar(title: Text('Independent page')),
       body: Column(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
